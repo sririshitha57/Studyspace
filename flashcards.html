@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudySpace - AI Flashcard Generator</title>
+  <meta name="description" content="Generate 30 smart flashcards (revision + MCQ) from notes or uploaded PDF/PPT files using AI.">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">
+    <h1>StudySpace</h1>
+    <p>Your smart companion for exams and learning</p>
+  </div>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#exams">Exams</a></li>
+    <li><a href="flashcards.html">Flashcards</a></li>
+    <li><a href="index.html#notes">Notes</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <h2>AI Flashcard Generator</h2>
+  <p>Paste notes or upload a PDF/PPT — get 30 flashcards (20 Revision + 10 MCQ)!</p>
+</div>
+
+<!-- GENERATOR SECTION -->
+<div class="generator-section" id="generator-section">
+
+  <h3>Enter Your Study Notes</h3>
+
+  <textarea id="user-notes" placeholder="Paste your study notes, definitions, or chapter content here..."></textarea>
+
+  <!-- File Upload -->
+  <div class="upload-area" id="upload-area">
+    <label for="file-upload" class="upload-label">
+      Upload a file
+      <span class="upload-formats">PDF, PPT, PPTX, TXT</span>
+    </label>
+    <input type="file" id="file-upload" accept=".pdf,.ppt,.pptx,.txt" onchange="handleFileUpload(event)" hidden>
+    <span class="file-name" id="file-name"></span>
+  </div>
+
+  <button class="generate-btn" id="generate-btn" onclick="generateFlashcards()">
+    Generate 30 Flashcards
+  </button>
+
+  <span class="helper-text">
+    Generates 20 revision (Q&A) + 10 multiple choice questions from your content.
+  </span>
+
+  <div class="status-msg" id="status-msg"></div>
+</div>
+
+<!-- LOADING SPINNER -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="spinner"></div>
+  <p class="loading-text">AI is generating 30 flashcards...</p>
+</div>
+
+<!-- FLASHCARD VIEWER -->
+<div class="flashcard-viewer" id="flashcard-viewer">
+
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-revision" onclick="switchTab('revision')">Revision (20)</button>
+    <button class="tab-btn" id="tab-mcq" onclick="switchTab('mcq')">MCQ (10)</button>
+  </div>
+
+  <!-- Revision Card -->
+  <div id="revision-view">
+    <div class="viewer-card" id="viewer-card" onclick="flipViewerCard()">
+      <div class="inner" id="viewer-inner">
+        <div class="front">
+          <img id="card-image" class="card-image" src="" alt="" style="display:none;">
+          <span class="card-label">Question</span>
+          <span id="card-question">Question goes here</span>
+        </div>
+        <div class="back">
+          <span class="card-label">Answer</span>
+          <span id="card-answer">Answer goes here</span>
+        </div>
+      </div>
+    </div>
+    <p class="tap-hint">Click the card to flip it</p>
+  </div>
+
+  <!-- MCQ Card -->
+  <div id="mcq-view" style="display:none;">
+    <div class="mcq-card" id="mcq-card">
+      <span class="card-label">MCQ</span>
+      <p class="mcq-question" id="mcq-question">Question?</p>
+      <div class="mcq-options" id="mcq-options"></div>
+      <p class="mcq-feedback" id="mcq-feedback"></p>
+      <p class="mcq-explanation" id="mcq-explanation" style="display:none;"></p>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">Prev</button>
+    <span class="card-counter" id="card-counter">1 / 20</span>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">Next</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2026 StudySpace</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

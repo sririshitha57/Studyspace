@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudySpace — Your Smart Study Companion</title>
+  <meta name="description" content="StudySpace helps students prepare for exams with AI-powered flashcards, study notes, and interactive learning tools.">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+
+  <!-- Shared Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ======== NAVBAR ======== -->
+<nav class="navbar">
+  <div class="logo">
+    <h1>StudySpace</h1>
+    <p>Your smart companion for exams and learning</p>
+  </div>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#exams">Exams</a></li>
+    <li><a href="flashcards.html">Flashcards</a></li>
+    <li><a href="#notes">Notes</a></li>
+  </ul>
+</nav>
+
+<!-- ======== HERO SECTION ======== -->
+<section class="hero">
+  <div>
+    <h2>Crack Your Dream Exam</h2>
+    <p>Smart study resources with interactive flashcards</p>
+    <button onclick="scrollToExams()">Explore</button>
+  </div>
+</section>
+
+<!-- ======== EXAMS SECTION ======== -->
+<section id="exams" class="section light">
+  <h2>Popular Exams</h2>
+  <p class="section-sub">Explore exams across different career paths</p>
+
+  <div class="cards">
+    <a href="https://jeemain.nta.nic.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>JEE</h3>
+        <p>Engineering entrance exam for top Indian institutes</p>
+      </div>
+    </a>
+    <a href="https://neet.nta.nic.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>NEET</h3>
+        <p>Medical entrance exam for MBBS and BDS courses</p>
+      </div>
+    </a>
+    <a href="https://upsc.gov.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>UPSC</h3>
+        <p>Civil services exam for IAS, IPS and government roles</p>
+      </div>
+    </a>
+    <a href="https://iimcat.ac.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>CAT</h3>
+        <p>Management entrance exam for IIMs and top B-schools</p>
+      </div>
+    </a>
+    <a href="https://ssc.gov.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>SSC CGL</h3>
+        <p>Government exam for graduate-level central jobs</p>
+      </div>
+    </a>
+    <a href="https://ibps.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>Banking</h3>
+        <p>Exams for recruitment in public sector banks</p>
+      </div>
+    </a>
+    <a href="https://admissions.bits-pilani.ac.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>BITSAT</h3>
+        <p>Entrance exam for admission to BITS Pilani campuses</p>
+      </div>
+    </a>
+    <a href="https://viteee.vit.ac.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>VITEEE</h3>
+        <p>Engineering entrance exam for VIT universities</p>
+      </div>
+    </a>
+    <a href="https://upsconline.nic.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>NDA</h3>
+        <p>Defence exam for Army, Navy and Air Force</p>
+      </div>
+    </a>
+    <a href="https://consortiumofnlus.ac.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>CLAT</h3>
+        <p>Law entrance exam for National Law Universities</p>
+      </div>
+    </a>
+    <a href="https://gate2026.iitg.ac.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>GATE</h3>
+        <p>Exam for postgraduate engineering and PSU jobs</p>
+      </div>
+    </a>
+    <a href="https://ugcnet.nta.ac.in" target="_blank" class="card-link">
+      <div class="card">
+        <h3>UGC NET</h3>
+        <p>Exam for lectureship and research positions</p>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ======== FLASHCARDS PREVIEW SECTION ======== -->
+<section id="flashcards" class="section">
+  <h2>Quick Flashcards</h2>
+
+  <div class="flash-container">
+    <div class="flashcard" onclick="flipCard(this)">
+      <div class="inner">
+        <div class="front">What is HTML?</div>
+        <div class="back">Structure of webpage</div>
+      </div>
+    </div>
+
+    <div class="flashcard" onclick="flipCard(this)">
+      <div class="inner">
+        <div class="front">What is CSS?</div>
+        <div class="back">Styles the webpage</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== NOTES SECTION ======== -->
+<section id="notes" class="section light">
+  <h2>Study Notes</h2>
+  <a href="notes.pdf" target="_blank" class="btn">Download Notes</a>
+</section>
+
+<!-- ======== FOOTER ======== -->
+<footer>
+  <p>&copy; 2026 StudySpace</p>
+</footer>
+
+<!-- Shared JavaScript -->
+<script src="script.js"></script>
+
+</body>
+</html>
