@@ -1,13 +1,37 @@
 /* STUDYSPACE — script.js */
 
 // Homepage
-function scrollToExams() { var el = document.getElementById("exams"); if (el) el.scrollIntoView({ behavior: "smooth" }); }
 function flipCard(card) { card.querySelector(".inner").classList.toggle("flipped"); }
+
+// =============================================
+// DARK MODE
+// =============================================
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
+  var isDark = document.body.classList.contains("dark-mode");
+  var icon = document.getElementById("toggle-icon");
+  if (icon) icon.textContent = isDark ? "☀️" : "🌙";
+  try { localStorage.setItem("studyspace-dark", isDark ? "1" : "0"); } catch (e) { }
+}
+function loadDarkMode() {
+  try {
+    if (localStorage.getItem("studyspace-dark") === "1") {
+      document.body.classList.add("dark-mode");
+      var icon = document.getElementById("toggle-icon");
+      if (icon) icon.textContent = "☀️";
+    }
+  } catch (e) { }
+}
+document.addEventListener("DOMContentLoaded", function () {
+  loadDarkMode();
+  loadAllTimeStats();
+});
 
 // Data
 var revisionCards = [], mcqCards = [], currentCardIndex = 0, currentTab = "revision";
 var uploadedFileText = "";
-var API_KEY = "AIzaSyA8FPGrHl6mo5xck6CKOjf0dbXQCIywoiU";
+var API_KEY = "AIzaSyDBcBignoxSjRLuJcbA9HoebXtt9zO4-JY";
+var sessionCorrect = 0, sessionWrong = 0;
 
 
 // =============================================
@@ -131,8 +155,13 @@ function generateFlashcards() {
 
 function finish(msg) {
   currentCardIndex = 0; currentTab = "revision";
+  sessionCorrect = 0; sessionWrong = 0;
   showLoading(false); document.getElementById("generate-btn").disabled = false;
   showStatus(msg, "success"); displayFlashcards();
+  incrementSession();
+  updateScoreDashboard();
+  var dash = document.getElementById("score-dashboard");
+  if (dash) dash.classList.add("visible");
 }
 
 
@@ -301,6 +330,7 @@ function updateCardDisplay() {
   document.getElementById("card-counter").textContent = (currentCardIndex + 1) + " / " + cards.length;
   document.getElementById("prev-btn").disabled = (currentCardIndex === 0);
   document.getElementById("next-btn").disabled = (currentCardIndex === cards.length - 1);
+  updateProgressBar(currentCardIndex + 1, cards.length);
 }
 
 function checkMCQ(btn, selected, correct, explanation) {
@@ -313,13 +343,17 @@ function checkMCQ(btn, selected, correct, explanation) {
     btn.classList.add("correct");
     fb.textContent = "Correct!";
     fb.className = "mcq-feedback correct";
+    sessionCorrect++;
   } else {
     btn.classList.add("wrong");
     fb.textContent = "Wrong! Correct answer: " + correct;
     fb.className = "mcq-feedback wrong";
     all.forEach(function (b) { if (b.textContent.startsWith(correct)) b.classList.add("correct"); });
+    sessionWrong++;
   }
   if (explanation) { exp.textContent = explanation; exp.style.display = "block"; }
+  updateScoreDashboard();
+  saveAllTimeStats(selected.startsWith(correct));
 }
 
 function flipViewerCard() { document.getElementById("viewer-inner").classList.toggle("flipped"); }
@@ -333,3 +367,78 @@ function prevCard() { if (currentCardIndex > 0) { currentCardIndex--; updateCard
 function showLoading(s) { var el = document.getElementById("loading-overlay"); if (el) el.classList.toggle("active", s); if (s) { var v = document.getElementById("flashcard-viewer"); if (v) v.style.display = "none"; } }
 function showStatus(m, t) { var el = document.getElementById("status-msg"); if (el) { el.textContent = m; el.className = "status-msg " + t; } }
 function hideStatus() { var el = document.getElementById("status-msg"); if (el) { el.className = "status-msg"; el.textContent = ""; } }
+
+
+// =============================================
+// PROGRESS BAR
+// =============================================
+function updateProgressBar(current, total) {
+  var pct = Math.round((current / total) * 100);
+  var bar = document.getElementById("progress-bar");
+  var txt = document.getElementById("progress-text");
+  if (bar) bar.style.setProperty("--progress", pct + "%");
+  if (txt) txt.textContent = pct + "%";
+}
+
+
+// =============================================
+// SCORE TRACKER DASHBOARD
+// =============================================
+function updateScoreDashboard() {
+  var total = sessionCorrect + sessionWrong;
+  var pct = total > 0 ? Math.round((sessionCorrect / total) * 100) : 0;
+
+  var el = function (id) { return document.getElementById(id); };
+  if (el("session-correct")) el("session-correct").textContent = sessionCorrect;
+  if (el("session-wrong")) el("session-wrong").textContent = sessionWrong;
+  if (el("session-total")) el("session-total").textContent = total;
+  if (el("score-percent")) el("score-percent").textContent = pct + "%";
+
+  // Update SVG ring
+  var ring = el("score-ring-fill");
+  if (ring) {
+    var circumference = 2 * Math.PI * 52; // r=52
+    var offset = circumference - (pct / 100) * circumference;
+    ring.style.strokeDashoffset = offset;
+    ring.style.stroke = pct >= 70 ? "#27ae60" : pct >= 40 ? "#f39c12" : "#e74c3c";
+  }
+}
+
+function saveAllTimeStats(wasCorrect) {
+  try {
+    var stats = JSON.parse(localStorage.getItem("studyspace-stats") || '{"sessions":0,"correct":0,"wrong":0}');
+    if (wasCorrect) stats.correct++; else stats.wrong++;
+    localStorage.setItem("studyspace-stats", JSON.stringify(stats));
+    loadAllTimeStats();
+  } catch (e) { }
+}
+
+function incrementSession() {
+  try {
+    var stats = JSON.parse(localStorage.getItem("studyspace-stats") || '{"sessions":0,"correct":0,"wrong":0}');
+    stats.sessions++;
+    localStorage.setItem("studyspace-stats", JSON.stringify(stats));
+  } catch (e) { }
+}
+
+function loadAllTimeStats() {
+  try {
+    var stats = JSON.parse(localStorage.getItem("studyspace-stats") || '{"sessions":0,"correct":0,"wrong":0}');
+    var total = stats.correct + stats.wrong;
+    var pct = total > 0 ? Math.round((stats.correct / total) * 100) : 0;
+    var el = function (id) { return document.getElementById(id); };
+    if (el("alltime-sessions")) el("alltime-sessions").textContent = stats.sessions;
+    if (el("alltime-total")) el("alltime-total").textContent = total;
+    if (el("alltime-correct")) el("alltime-correct").textContent = stats.correct;
+    if (el("alltime-wrong")) el("alltime-wrong").textContent = stats.wrong;
+    if (el("alltime-accuracy")) el("alltime-accuracy").textContent = pct + "%";
+  } catch (e) { }
+}
+
+function resetAllTimeStats() {
+  if (!confirm("Reset all-time stats? This cannot be undone.")) return;
+  try {
+    localStorage.setItem("studyspace-stats", JSON.stringify({ sessions: 0, correct: 0, wrong: 0 }));
+    loadAllTimeStats();
+  } catch (e) { }
+}

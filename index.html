@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StudySpace — Your Smart Study Companion</title>
-  <meta name="description" content="StudySpace helps students prepare for exams with AI-powered flashcards, study notes, and interactive learning tools.">
+  <meta name="description" content="StudySpace helps students prepare for exams with AI-powered flashcards, interactive learning tools, and smart study tracking.">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
   <!-- Shared Stylesheet -->
   <link rel="stylesheet" href="style.css">
@@ -23,132 +23,123 @@
   </div>
   <ul>
     <li><a href="#">Home</a></li>
-    <li><a href="#exams">Exams</a></li>
+    <li><a href="#features">Features</a></li>
     <li><a href="flashcards.html">Flashcards</a></li>
-    <li><a href="#notes">Notes</a></li>
+    <li>
+      <button class="dark-mode-toggle" id="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <span class="toggle-icon" id="toggle-icon">🌙</span>
+      </button>
+    </li>
   </ul>
 </nav>
 
 <!-- ======== HERO SECTION ======== -->
 <section class="hero">
-  <div>
-    <h2>Crack Your Dream Exam</h2>
-    <p>Smart study resources with interactive flashcards</p>
-    <button onclick="scrollToExams()">Explore</button>
+  <div class="hero-content">
+    <span class="hero-badge">AI-Powered Study Tool</span>
+    <h2>Study Smarter,<br>Not Harder</h2>
+    <p>Generate 30 smart flashcards from your notes in seconds — revision cards, MCQs, and score tracking built in.</p>
+    <a href="flashcards.html" class="hero-cta" id="hero-cta">
+      Generate Flashcards
+      <span class="cta-arrow">→</span>
+    </a>
+  </div>
+  <div class="hero-glow"></div>
+</section>
+
+<!-- ======== FEATURES / HOW IT WORKS ======== -->
+<section id="features" class="section light">
+  <h2>How It Works</h2>
+  <p class="section-sub">Three steps to supercharge your study sessions</p>
+
+  <div class="features-grid">
+    <div class="feature-card" id="feature-upload">
+      <div class="feature-icon">📄</div>
+      <div class="feature-step">Step 1</div>
+      <h3>Upload or Paste</h3>
+      <p>Drop in your PDF, PPTX, or paste study notes directly into the editor</p>
+    </div>
+
+    <div class="feature-card" id="feature-generate">
+      <div class="feature-icon">🤖</div>
+      <div class="feature-step">Step 2</div>
+      <h3>AI Generates Cards</h3>
+      <p>Gemini AI creates 20 revision Q&A cards and 10 competitive-level MCQs</p>
+    </div>
+
+    <div class="feature-card" id="feature-track">
+      <div class="feature-icon">📊</div>
+      <div class="feature-step">Step 3</div>
+      <h3>Study & Track</h3>
+      <p>Flip cards, answer MCQs, track your accuracy, and improve with each session</p>
+    </div>
   </div>
 </section>
 
-<!-- ======== EXAMS SECTION ======== -->
-<section id="exams" class="section light">
-  <h2>Popular Exams</h2>
-  <p class="section-sub">Explore exams across different career paths</p>
+<!-- ======== STATS HIGHLIGHT SECTION ======== -->
+<section class="section stats-section">
+  <h2>Built for Serious Students</h2>
+  <p class="section-sub">Everything you need for focused, efficient studying</p>
 
-  <div class="cards">
-    <a href="https://jeemain.nta.nic.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>JEE</h3>
-        <p>Engineering entrance exam for top Indian institutes</p>
-      </div>
-    </a>
-    <a href="https://neet.nta.nic.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>NEET</h3>
-        <p>Medical entrance exam for MBBS and BDS courses</p>
-      </div>
-    </a>
-    <a href="https://upsc.gov.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>UPSC</h3>
-        <p>Civil services exam for IAS, IPS and government roles</p>
-      </div>
-    </a>
-    <a href="https://iimcat.ac.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>CAT</h3>
-        <p>Management entrance exam for IIMs and top B-schools</p>
-      </div>
-    </a>
-    <a href="https://ssc.gov.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>SSC CGL</h3>
-        <p>Government exam for graduate-level central jobs</p>
-      </div>
-    </a>
-    <a href="https://ibps.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>Banking</h3>
-        <p>Exams for recruitment in public sector banks</p>
-      </div>
-    </a>
-    <a href="https://admissions.bits-pilani.ac.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>BITSAT</h3>
-        <p>Entrance exam for admission to BITS Pilani campuses</p>
-      </div>
-    </a>
-    <a href="https://viteee.vit.ac.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>VITEEE</h3>
-        <p>Engineering entrance exam for VIT universities</p>
-      </div>
-    </a>
-    <a href="https://upsconline.nic.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>NDA</h3>
-        <p>Defence exam for Army, Navy and Air Force</p>
-      </div>
-    </a>
-    <a href="https://consortiumofnlus.ac.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>CLAT</h3>
-        <p>Law entrance exam for National Law Universities</p>
-      </div>
-    </a>
-    <a href="https://gate2026.iitg.ac.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>GATE</h3>
-        <p>Exam for postgraduate engineering and PSU jobs</p>
-      </div>
-    </a>
-    <a href="https://ugcnet.nta.ac.in" target="_blank" class="card-link">
-      <div class="card">
-        <h3>UGC NET</h3>
-        <p>Exam for lectureship and research positions</p>
-      </div>
-    </a>
+  <div class="stats-grid">
+    <div class="stat-card" id="stat-flashcards">
+      <div class="stat-number">30</div>
+      <div class="stat-label">Flashcards per session</div>
+    </div>
+    <div class="stat-card" id="stat-revision">
+      <div class="stat-number">20</div>
+      <div class="stat-label">Revision Q&A cards</div>
+    </div>
+    <div class="stat-card" id="stat-mcq">
+      <div class="stat-number">10</div>
+      <div class="stat-label">MCQ with explanations</div>
+    </div>
+    <div class="stat-card" id="stat-formats">
+      <div class="stat-number">3</div>
+      <div class="stat-label">File formats supported</div>
+    </div>
   </div>
 </section>
 
-<!-- ======== FLASHCARDS PREVIEW SECTION ======== -->
-<section id="flashcards" class="section">
-  <h2>Quick Flashcards</h2>
+<!-- ======== QUICK FLASHCARDS PREVIEW ======== -->
+<section id="flashcards-preview" class="section light">
+  <h2>Try a Flashcard</h2>
+  <p class="section-sub">Click to flip — this is what your AI-generated cards look like</p>
 
   <div class="flash-container">
     <div class="flashcard" onclick="flipCard(this)">
       <div class="inner">
         <div class="front">What is HTML?</div>
-        <div class="back">Structure of webpage</div>
+        <div class="back">HyperText Markup Language — defines the structure and content of web pages</div>
       </div>
     </div>
 
     <div class="flashcard" onclick="flipCard(this)">
       <div class="inner">
         <div class="front">What is CSS?</div>
-        <div class="back">Styles the webpage</div>
+        <div class="back">Cascading Style Sheets — controls layout, colors, fonts, and visual styling</div>
+      </div>
+    </div>
+
+    <div class="flashcard" onclick="flipCard(this)">
+      <div class="inner">
+        <div class="front">What is JavaScript?</div>
+        <div class="back">A programming language that adds interactivity and dynamic behavior to web pages</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ======== NOTES SECTION ======== -->
-<section id="notes" class="section light">
-  <h2>Study Notes</h2>
-  <a href="notes.pdf" target="_blank" class="btn">Download Notes</a>
+<!-- ======== CTA BANNER ======== -->
+<section class="cta-banner">
+  <h2>Ready to ace your next exam?</h2>
+  <p>Upload your notes and let AI do the heavy lifting</p>
+  <a href="flashcards.html" class="hero-cta" id="cta-bottom">Get Started Free <span class="cta-arrow">→</span></a>
 </section>
 
 <!-- ======== FOOTER ======== -->
 <footer>
-  <p>&copy; 2026 StudySpace</p>
+  <p>&copy; 2026 StudySpace — AI-powered study companion</p>
 </footer>
 
 <!-- Shared JavaScript -->

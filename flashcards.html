@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StudySpace - AI Flashcard Generator</title>
   <meta name="description" content="Generate 30 smart flashcards (revision + MCQ) from notes or uploaded PDF/PPT files using AI.">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <link rel="stylesheet" href="style.css">
@@ -21,9 +21,12 @@
   </div>
   <ul>
     <li><a href="index.html">Home</a></li>
-    <li><a href="index.html#exams">Exams</a></li>
     <li><a href="flashcards.html">Flashcards</a></li>
-    <li><a href="index.html#notes">Notes</a></li>
+    <li>
+      <button class="dark-mode-toggle" id="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <span class="toggle-icon" id="toggle-icon">🌙</span>
+      </button>
+    </li>
   </ul>
 </nav>
 
@@ -76,6 +79,12 @@
     <button class="tab-btn" id="tab-mcq" onclick="switchTab('mcq')">MCQ (10)</button>
   </div>
 
+  <!-- Progress Bar -->
+  <div class="progress-container" id="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+    <span class="progress-text" id="progress-text">0%</span>
+  </div>
+
   <!-- Revision Card -->
   <div id="revision-view">
     <div class="viewer-card" id="viewer-card" onclick="flipViewerCard()">
@@ -107,15 +116,79 @@
 
   <!-- Navigation -->
   <div class="nav-controls">
-    <button class="nav-btn" id="prev-btn" onclick="prevCard()">Prev</button>
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">← Prev</button>
     <span class="card-counter" id="card-counter">1 / 20</span>
-    <button class="nav-btn" id="next-btn" onclick="nextCard()">Next</button>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">Next →</button>
+  </div>
+</div>
+
+<!-- SCORE TRACKER DASHBOARD -->
+<div class="score-dashboard" id="score-dashboard">
+  <h3 class="dashboard-title">📊 Score Dashboard</h3>
+
+  <div class="dashboard-grid">
+    <!-- Current Session -->
+    <div class="dashboard-card session-card" id="session-card">
+      <h4>Current Session</h4>
+      <div class="score-ring-container">
+        <svg class="score-ring" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="52" />
+          <circle class="score-ring-fill" id="score-ring-fill" cx="60" cy="60" r="52" />
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-percent" id="score-percent">0%</span>
+          <span class="score-label">Accuracy</span>
+        </div>
+      </div>
+      <div class="score-stats">
+        <div class="score-stat correct">
+          <span class="stat-val" id="session-correct">0</span>
+          <span class="stat-lbl">Correct</span>
+        </div>
+        <div class="score-stat wrong">
+          <span class="stat-val" id="session-wrong">0</span>
+          <span class="stat-lbl">Wrong</span>
+        </div>
+        <div class="score-stat total">
+          <span class="stat-val" id="session-total">0</span>
+          <span class="stat-lbl">Attempted</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- All-Time Stats -->
+    <div class="dashboard-card alltime-card" id="alltime-card">
+      <h4>All-Time Stats</h4>
+      <div class="alltime-stats">
+        <div class="alltime-row">
+          <span class="alltime-label">Sessions</span>
+          <span class="alltime-value" id="alltime-sessions">0</span>
+        </div>
+        <div class="alltime-row">
+          <span class="alltime-label">Total MCQs</span>
+          <span class="alltime-value" id="alltime-total">0</span>
+        </div>
+        <div class="alltime-row">
+          <span class="alltime-label">Correct</span>
+          <span class="alltime-value alltime-correct" id="alltime-correct">0</span>
+        </div>
+        <div class="alltime-row">
+          <span class="alltime-label">Wrong</span>
+          <span class="alltime-value alltime-wrong" id="alltime-wrong">0</span>
+        </div>
+        <div class="alltime-row highlight">
+          <span class="alltime-label">Overall Accuracy</span>
+          <span class="alltime-value" id="alltime-accuracy">0%</span>
+        </div>
+      </div>
+      <button class="reset-stats-btn" id="reset-stats-btn" onclick="resetAllTimeStats()">Reset All-Time Stats</button>
+    </div>
   </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <p>&copy; 2026 StudySpace</p>
+  <p>&copy; 2026 StudySpace — AI-powered study companion</p>
 </footer>
 
 <script src="script.js"></script>
