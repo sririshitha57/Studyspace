@@ -49,24 +49,6 @@ StudySpace/
 2. Open `index.html` in any browser, or double-click `open.bat`
 3. No server or build tools required
 
-## Exam Links
-
-Each exam card on the homepage links to its official portal:
-
-| Exam | Official Website |
-|------|-----------------|
-| JEE | jeemain.nta.nic.in |
-| NEET | neet.nta.nic.in |
-| UPSC | upsc.gov.in |
-| CAT | iimcat.ac.in |
-| SSC CGL | ssc.gov.in |
-| Banking | ibps.in |
-| BITSAT | admissions.bits-pilani.ac.in |
-| VITEEE | viteee.vit.ac.in |
-| NDA | upsconline.nic.in |
-| CLAT | consortiumofnlus.ac.in |
-| GATE | gate2026.iitg.ac.in |
-| UGC NET | ugcnet.nta.ac.in |
 
 ## License
 
