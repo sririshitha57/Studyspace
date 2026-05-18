@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Data
 var revisionCards = [], mcqCards = [], currentCardIndex = 0, currentTab = "revision";
 var uploadedFileText = "";
-var API_KEY = "AIzaSyDBcBignoxSjRLuJcbA9HoebXtt9zO4-JY";
+var API_KEY = "AIzaSyB_vTaN1qgGRItKqWg8ekBfFx0AzwXsY2w";
 var sessionCorrect = 0, sessionWrong = 0;
 
 
@@ -146,10 +146,14 @@ function generateFlashcards() {
     });
   }).catch(function (err) {
     console.error("Gemini API failed:", err);
-    // Show clear error — don't silently fall back to bad content
     showLoading(false);
     document.getElementById("generate-btn").disabled = false;
-    showStatus("AI generation failed: " + err.message + ". Check your internet connection and try again.", "error");
+    var errMsg = err.message || String(err);
+    if (errMsg.indexOf("Failed to fetch") !== -1 || errMsg.indexOf("NetworkError") !== -1) {
+      showStatus("Network error: Check your internet connection and try again.", "error");
+    } else {
+      showStatus("AI generation failed: " + errMsg, "error");
+    }
   });
 }
 
@@ -168,8 +172,13 @@ function finish(msg) {
 // =============================================
 // GEMINI API — NotebookLM-style quality prompt
 // =============================================
-function callGeminiAPI(text) {
-  var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
+function callGeminiAPI(text, retryCount) {
+  if (typeof retryCount === "undefined") retryCount = 0;
+  var MAX_RETRIES = 2;
+  var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + API_KEY;
+
+  console.log("[StudySpace] Calling Gemini API (attempt " + (retryCount + 1) + ")...");
+  console.log("[StudySpace] API URL:", url.replace(API_KEY, "***"));
 
   var prompt = "You are an AI study assistant similar to Google NotebookLM. "
     + "A student has shared their study material with you. "
@@ -230,24 +239,46 @@ function callGeminiAPI(text) {
     })
   })
     .then(function (r) {
+      console.log("[StudySpace] API response status:", r.status);
       if (!r.ok) {
         return r.text().then(function (body) {
-          throw new Error("API returned " + r.status + ": " + body.substring(0, 200));
+          console.error("[StudySpace] API error body:", body);
+          var errMsg = "API returned " + r.status + ": " + body.substring(0, 300);
+          // Retry on 500/503 server errors
+          if ((r.status >= 500 || r.status === 429) && retryCount < MAX_RETRIES) {
+            console.log("[StudySpace] Retrying in 2 seconds...");
+            return new Promise(function (resolve) { setTimeout(resolve, 2000); })
+              .then(function () { return callGeminiAPI(text, retryCount + 1); });
+          }
+          throw new Error(errMsg);
         });
       }
       return r.json();
     })
     .then(function (data) {
+      console.log("[StudySpace] API response received, parsing...");
       if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+        console.error("[StudySpace] Unexpected response structure:", JSON.stringify(data).substring(0, 500));
         throw new Error("Empty response from AI. The content may have been blocked.");
       }
-      var raw = data.candidates[0].content.parts[0].text;
-      raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+      // Gemini 2.5 may return multiple parts (thinking + response) — find the text part
+      var parts = data.candidates[0].content.parts;
+      var raw = "";
+      for (var i = 0; i < parts.length; i++) {
+        if (parts[i].text) raw = parts[i].text; // Use the last text part (final answer)
+      }
+      if (!raw) throw new Error("No text found in AI response");
+      console.log("[StudySpace] Raw AI output (first 200 chars):", raw.substring(0, 200));
+      raw = raw.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+      // Try to extract JSON if there's extra text around it
+      var jsonMatch = raw.match(/\{[\s\S]*\}/);
+      if (jsonMatch) raw = jsonMatch[0];
       var res = JSON.parse(raw);
       if (!res.revision || !res.mcq) throw new Error("AI returned unexpected format");
       var revision = res.revision.filter(function (c) { return c.question && c.answer; });
       var mcq = res.mcq.filter(function (c) { return c.question && c.options && c.options.length === 4 && c.correct && c.explanation; });
       if (revision.length === 0 && mcq.length === 0) throw new Error("AI could not generate questions from this content");
+      console.log("[StudySpace] Success! " + revision.length + " revision + " + mcq.length + " MCQ cards");
       return { revision: revision, mcq: mcq };
     });
 }
